@@ -17,6 +17,9 @@ import com.user.model.Customer;
 
 @WebServlet("/customer/register")
 public class CustomerRegistrationController extends HttpServlet {
+	
+	// form Git-Hub
+	
 	private static final long serialVersionUID = 1L;
 
 	private CustomerDao customerDao = CustomerDaoImpl.getInstance();
