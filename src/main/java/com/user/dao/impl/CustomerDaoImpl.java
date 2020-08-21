@@ -7,10 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.user.dao1.CustomerDao;
+import com.user.dao.CustomerDao;
 import com.user.db.Database;
 import com.user.model.Customer;
-
 
 public class CustomerDaoImpl implements CustomerDao {
 
@@ -22,9 +21,10 @@ public class CustomerDaoImpl implements CustomerDao {
 		String sql = "INSERT INTO customer_master(first_name, last_name, email, mobile)" 
 					+ "VALUES(?,?,?,?)";
 		long id = 0;
+		PreparedStatement pstmt = null;
 
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, customer.getFirstName());
 			pstmt.setString(2, customer.getLastName());
 			pstmt.setString(3, customer.getEmail());
@@ -40,17 +40,28 @@ public class CustomerDaoImpl implements CustomerDao {
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
+		} finally {
+			closePreparedStatement(pstmt);
 		}
 
 		return id;
 	}
 
-	public void updateCustomer(Customer customer) {
-		String sql = "UPDATE customer_master SET first_name=?, last_name=?, email=?, mobile=? " 
-					+ "WHERE customer_id=?";
-
+	private void closePreparedStatement(PreparedStatement statement) {
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(sql);
+			if (statement != null && !statement.isClosed()) {
+				statement.close();
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+	}
+
+	public void updateCustomer(Customer customer) {
+		String sql = "UPDATE customer_master SET first_name=?, last_name=?, email=?, mobile=? " + "WHERE customer_id=?";
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, customer.getFirstName());
 			pstmt.setString(2, customer.getLastName());
 			pstmt.setString(3, customer.getEmail());
@@ -62,14 +73,16 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
+		} finally {
+			closePreparedStatement(pstmt);
 		}
 	}
 
 	public void deleteCustomer(Long id) {
 		String sql = "DELETE FROM customer_master WHERE customer_id=?";
-
+		PreparedStatement pstmt = null;
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt = connection.prepareStatement(sql);
 			pstmt.setLong(1, id);
 
 			// Delete Customer Account
@@ -77,14 +90,16 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
+		} finally {
+			closePreparedStatement(pstmt);
 		}
 	}
 
 	public Customer findCustomerById(Long id) {
 		String sql = "SELECT * FROM customer_master WHERE customer_id=?";
-
+		PreparedStatement pstmt = null;
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(sql);
+			pstmt = connection.prepareStatement(sql);
 			pstmt.setLong(1, id);
 
 			// Getting Customer Detail
@@ -102,6 +117,8 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
+		} finally {
+			closePreparedStatement(pstmt);
 		}
 
 		return null;
@@ -150,6 +167,13 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	public void updateCustomer(CustomerDao customer) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		if (!connection.isClosed())
+			connection.close();
+	}
+
 }

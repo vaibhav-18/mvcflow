@@ -2,6 +2,7 @@ package com.user.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Database {
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -11,7 +12,7 @@ public class Database {
 	
 	private static Connection connection = null;
 	
-	public static Connection getConnection(){
+	public static Connection getConnection() {
 		if(connection==null){
 			try{
 				//Loading The Driver Class
@@ -22,6 +23,7 @@ public class Database {
 			}catch (Exception ex) {
 				System.out.println(ex.getMessage());
 			}
+			
 		}
 		
 		return connection;

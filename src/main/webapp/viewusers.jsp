@@ -6,36 +6,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Servlet, JSP and JDBC CRUD Operations</title>
-
-<style type="text/css">
-	body{
-		text-align: center;
-	}
-	table {
-		margin-left: 15%;
-		min-width: 70%; 
-		border: 1px solid #CCC;
-		border-collapse: collapse; 
-	}
-	table tr{line-height: 30px;}
-	table tr th { background: #000033; color: #FFF;}
-	table tr td { border:1px solid #CCC; margin: 5px;}
-	input[type=text], input[type=email], input[type=tel]{
-		min-width: 60%;
-	}
-	input[type=submit], a{
-		background: green;
-		padding: 5px;
-		margin: 5px;
-		color: #FFF;
-	}
-	a{
-		text-decoration: none;
-	}
-</style>
+<link rel="stylesheet" type="text/css" href="common.css">
 </head>
 <body>
-	<h1>List of Customers</h1>
+	<h1 align="center">List of Customers</h1>
 	<table>
 		<tr>
 			<th>ID</th>
@@ -55,19 +29,22 @@
 				<td>${customer.mobile}</td>
 				
 				<td>
-					<form action="<c:url value="/customer/update"/>" method="get">
+					<form action="<c:url value="/customer"/>" method="get">
 						<input type="hidden" name="custId" value="${customer.id}">
 						<input type="submit" value="Edit">
 					</form>
 				<td>
-					<form action="<c:url value="/customer/delete"/>" method="post">
+					<form action="<c:url value="/customer"/>">
 						<input type="hidden" name="custId" value="${customer.id}">
+						<input type="hidden" name="_method" value="DELETE">
 						<input style="background: #F00;" type="submit" value="Delete">
 					</form>
 				</td>
 			</tr>
 		</c:forEach>
 	</table>
+	<center>
 	<a href="adduserform.jsp">Add User</a>
+	</center>
 </body>
 </html>

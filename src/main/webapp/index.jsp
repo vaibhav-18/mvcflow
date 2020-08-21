@@ -8,8 +8,8 @@
 <body>  
 <h1>MVC Flow</h1>  
 <a href="adduserform.jsp">Add User</a>
-	<c:url value="/user/viewUsers" var="viewUsers" />
-	<form action="<%=request.getContextPath()%>/viewUsers" method="get">
+	<c:url value="/customer" var="customer" />
+	<form action="<%=request.getContextPath()%>/customer" method="get">
 	<input type="submit" value="View Users">
 	</form>
   
